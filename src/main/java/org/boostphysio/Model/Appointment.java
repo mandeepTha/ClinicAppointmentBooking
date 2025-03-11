@@ -25,7 +25,8 @@ public class Appointment {
    }
 
    public void Cancel(){
-        status = "Canceled";
+
+        this.status = "Cancelled";
         System.out.println("Appointment Canceled for " + patient.getPatientFullName() + " with " + physiotherapist.getPhysiotherapistName());
    }
 
@@ -35,5 +36,10 @@ public class Appointment {
 
     public String toString(){
         return "Appointment: " + treatment.getTreatmentName()+ " with " + physiotherapist.getPhysiotherapistName()+" for " + patient.getPatientFullName()+" on "+date+ " [" + status + "]";
+    }
+
+    public String getStatus() {
+
+        return status;
     }
 }

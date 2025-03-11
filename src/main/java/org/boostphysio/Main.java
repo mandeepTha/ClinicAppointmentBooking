@@ -26,6 +26,7 @@ public class Main {
         clinic.addPatient(patient);
         clinic.addPhysiotherapist(physiotherapist);
         clinic.bookAppointment(appointment);
+        clinic.cancelAppointment(appointment);
         appointment.Confirm();
         //generate a clinic report
         clinic.GenerateReport();

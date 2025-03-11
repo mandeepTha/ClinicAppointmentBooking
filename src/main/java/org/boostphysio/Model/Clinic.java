@@ -14,16 +14,30 @@ public class Clinic {
         patients.add(patient);
         System.out.println("Added Patient: "+patient.getPatientFullName());
     }
+
+    public List<Patient> getPatients() {
+        return patients;
+    }
         //Adds New Physiotherapist
     public void addPhysiotherapist(Physiotherapist physiotherapist) {
         physiotherapists.add(physiotherapist);
         System.out.println("Added Physiotherapist: "+physiotherapist.getPhysiotherapistName());
 
     }
+    public List<Physiotherapist> getPhysiotherapists() {
+        return physiotherapists;
+    }
         //Books an Appointment
    public void bookAppointment(Appointment appointment) {
         appointments.add(appointment);
         System.out.println("Appointment Booked for: "+appointment);
+   }
+   public List<Appointment> getAppointments() {
+        return appointments;
+   }
+   public void cancelAppointment(Appointment appointment) {
+        appointment.Cancel();
+        System.out.println("Appointment Canceled for: "+appointment);
    }
         //
     public void GenerateReport(){
