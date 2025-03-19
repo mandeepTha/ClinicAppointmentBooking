@@ -30,7 +30,7 @@ public class ClinicTest {
         Patient patient = new Patient(1,"Jason Becker", "Welling, 34 Rail road","0739012546");
         Physiotherapist physiotherapist = new Physiotherapist(1,"Dr.Harvey", Arrays.asList("Physiotherapy"));
         Treatment treatment = new Treatment("Massage", 60, 50 );
-        Appointment appointment = new Appointment(LocalDateTime.of(2025,4,10,15,0),"Booked",patient,physiotherapist,treatment);
+        Appointment appointment = new Appointment("dasdfg","Booked",patient,physiotherapist,treatment);
 
         clinic.bookAppointment(appointment);
         assertEquals(1, clinic.getAppointments().size());
@@ -42,7 +42,7 @@ public class ClinicTest {
         Patient patient = new Patient(1,"Jason Becker", "Welling, 34 Rail road","0739012546");
         Physiotherapist physiotherapist = new Physiotherapist(1,"Dr.Harvey", Arrays.asList("Physiotherapy"));
         Treatment treatment = new Treatment("Massage", 60, 50 );
-        Appointment appointment = new Appointment(LocalDateTime.of(2025,4,10,15,0),"Booked",patient,physiotherapist,treatment);
+        Appointment appointment = new Appointment("asdf","Booked",patient,physiotherapist,treatment);
 
         clinic.cancelAppointment(appointment);
         appointment.Cancel();
@@ -54,7 +54,7 @@ public class ClinicTest {
         Patient patient = new Patient(1,"Jason Becker", "Welling, 34 Rail road","0739012546");
         Physiotherapist physiotherapist = new Physiotherapist(1,"Dr.Harvey", Arrays.asList("Physiotherapy"));
         Treatment treatment = new Treatment("Massage", 60, 50 );
-        Appointment appointment = new Appointment(LocalDateTime.of(2025,4,10,15,0),"Booked",patient,physiotherapist,treatment);
+        Appointment appointment = new Appointment("asdf","Booked",patient,physiotherapist,treatment);
 
         clinic.bookAppointment(appointment);
         clinic.GenerateReport();

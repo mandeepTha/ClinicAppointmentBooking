@@ -1,45 +1,43 @@
 package org.boostphysio.Model;
 
-import java.time.LocalDateTime;
-
-public class Appointment {
+public class Appointment extends Treatment {
     private Physiotherapist physiotherapist;
     private Patient patient;
     private Treatment treatment;
-    private LocalDateTime date;
     private String status;
-    private String patientName;
-    private String physiotherapistName;
 
-    public Appointment(LocalDateTime date, String status, Patient patient, Physiotherapist physiotherapist, Treatment treatment) {
-        this.date = date;
-        this.status = "Booked";
+    public Appointment(Patient patient, Physiotherapist physiotherapist, Treatment treatment, String status) {
+        super();
+
         this.patient = patient;
         this.physiotherapist = physiotherapist;
         this.treatment = treatment;
+        this.status = "APPOINTMENT";
     }
 
-   public void Confirm(){
-        status = "Confirmed";
-        System.out.println("Appointment Confirmed for " + patient.getPatientFullName() + " With " + physiotherapist.getPhysiotherapistName());
-   }
 
-   public void Cancel(){
 
-        this.status = "Cancelled";
-        System.out.println("Appointment Canceled for " + patient.getPatientFullName() + " with " + physiotherapist.getPhysiotherapistName());
-   }
-
+    public String getStatus() {
+        return status;
+    }
     public Patient getPatient() {
         return patient;
     }
+    public Physiotherapist getPhysiotherapist() {
+        return physiotherapist;
+    }
+    public Treatment getTreatment() {
+        return treatment;
+    }
+
 
     public String toString(){
-        return "Appointment: " + treatment.getTreatmentName()+ " with " + physiotherapist.getPhysiotherapistName()+" for " + patient.getPatientFullName()+" on "+date+ " [" + status + "]";
+        return "Appointment Details:\n" +
+                "Patient: " +patient.getPatientName()+ "(Phone number: "+ patient.getPatientPhoneNumber()+")\n"+
+                "Physiotherapist: "+physiotherapist.getPhysiotherapistName()+ "(Expertise: "+physiotherapist.getExpertise()+")\n"+
+                "Treatment: "+treatment.getTreatmentName()+ "\n" +
+                "Date & Time: "+ treatment.getTime() ;
+
     }
 
-    public String getStatus() {
-
-        return status;
-    }
 }

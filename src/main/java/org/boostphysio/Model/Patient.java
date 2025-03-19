@@ -2,29 +2,38 @@ package org.boostphysio.Model;
 
 public class Patient {
     private int id;
-    private String PatientFullName;
-    private String address;
-    private String phoneNumber;
+    private String PatientName;
+    private String PatientAddress;
+    private String PatientPhoneNumber;
 
-    public Patient(int id, String fullName, String address, String phone) {
+    public Patient(int id, String PatientName, String PatientAddress, String PatientPhoneNumber) {
         this.id = id;
-        this.PatientFullName = fullName;
-        this.address = address;
-        this.phoneNumber = phone;
+        this.PatientName = PatientName;
+        this.PatientAddress = PatientAddress;
+        this.PatientPhoneNumber = PatientPhoneNumber;
     }
-    public String getPatientFullName() {
-        return PatientFullName;
+    public String getPatientName() {
+        return PatientName;
     }
 
     public int getId(){
         return id;
     }
-
-    public void BookAppointment(Appointment appointment) {
-        System.out.println(PatientFullName + "Booked an appointment at: " + appointment);
+    public String getPatientAddress() {
+        return PatientAddress;
+    }
+    public String getPatientPhoneNumber() {
+        return PatientPhoneNumber;
+    }
+    @Override
+    public String toString() {
+        return "Patient: " + PatientName + " (ID: " + id + ")\n" +
+                "Address: " + PatientAddress + "\nPhone: " + PatientPhoneNumber;
     }
 
-    public void CancelAppointment(Appointment appointment) {
-        System.out.println(PatientFullName + "Cancelled an appointment: " + appointment);
-    }
+
+
+
+
+
 }

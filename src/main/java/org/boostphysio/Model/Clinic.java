@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Clinic {
 
+
     private List<Patient> patients = new ArrayList<>();
     private List<Appointment> appointments = new ArrayList<>();
     private List<Physiotherapist> physiotherapists = new ArrayList<>();
@@ -12,21 +13,16 @@ public class Clinic {
         // Adds New Patient
     public void addPatient(Patient patient) {
         patients.add(patient);
-        System.out.println("Added Patient: "+patient.getPatientFullName());
+        System.out.println("Added Patient: "+patient.getPatientName());
     }
 
-    public List<Patient> getPatients() {
-        return patients;
-    }
         //Adds New Physiotherapist
     public void addPhysiotherapist(Physiotherapist physiotherapist) {
         physiotherapists.add(physiotherapist);
         System.out.println("Added Physiotherapist: "+physiotherapist.getPhysiotherapistName());
 
     }
-    public List<Physiotherapist> getPhysiotherapists() {
-        return physiotherapists;
-    }
+
         //Books an Appointment
    public void bookAppointment(Appointment appointment) {
         appointments.add(appointment);
@@ -35,10 +31,13 @@ public class Clinic {
    public List<Appointment> getAppointments() {
         return appointments;
    }
-   public void cancelAppointment(Appointment appointment) {
-        appointment.Cancel();
-        System.out.println("Appointment Canceled for: "+appointment);
-   }
+    public List<Patient> getPatients() {
+        return patients;
+    }
+    public List<Physiotherapist> getPhysiotherapists() {
+        return physiotherapists;
+    }
+
         //
     public void GenerateReport(){
         System.out.println("\n Appointment Report");
