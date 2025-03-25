@@ -1,35 +1,37 @@
 package org.boostphysio.Model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 public class Physiotherapist {
     private int id;
-    private String PhysiotherapistName;
-    private String PhysiotherapistAddress;
-    private String PhysiotherapistPhone;
+    private String physiotherapistName;
+    private String physiotherapistAddress;
+    private String physiotherapistPhone;
     private List<String> expertise;
-    List <Treatment> timetable = new ArrayList<>();
+    List <Date> timetable = new ArrayList<>();
 
 
     public Physiotherapist(int id, String PhysiotherapistName, String PhysiotherapistAddress, List<String> expertise) {
         this.id = id;
-        this.PhysiotherapistName = PhysiotherapistName;
-        this.PhysiotherapistAddress = PhysiotherapistAddress;
+        this.physiotherapistName = PhysiotherapistName;
+        this.physiotherapistAddress = PhysiotherapistAddress;
         this.expertise = expertise;
     }
-    public void addTreatment(Treatment treatment) {
-        timetable.add(treatment);
+
+    public List<Date> getTimetable() {
+        return timetable;
     }
+
     public int getId() {
         return id;
     }
     public String getPhysiotherapistName() {
-        return PhysiotherapistName;
+        return physiotherapistName;
     }
-    public String getPhysiotherapistAddress() {
-        return PhysiotherapistAddress;
+    public String getphysiotherapistAddress() {
+        return physiotherapistAddress;
     }
     public List<String> getExpertise() {
         return expertise;
@@ -37,7 +39,7 @@ public class Physiotherapist {
     @Override
     public String toString() {
         return "Physiotherapist: " + getPhysiotherapistName() + " (ID: " + id + ")\n" +
-                "Address: " + PhysiotherapistAddress + "\nPhone: " + PhysiotherapistPhone + "\n" +
+                "Address: " + physiotherapistAddress + "\nPhone: " + physiotherapistPhone + "\n" +
                 "Expertise: " + expertise + "\nWorking Hours: " + timetable;
     }
 }

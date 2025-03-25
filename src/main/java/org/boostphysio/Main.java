@@ -25,6 +25,7 @@ public class Main {
 
     public static void main(String[] args) {
         initializeData();
+        selectUser();
         showMenu();
 
 
@@ -54,16 +55,20 @@ public class Main {
         Physiotherapist p3 =new Physiotherapist(3, "Dr. Nishant James", "", Arrays.asList("Cardiorespiratory Physiotherapy", "Asthma"));
         Physiotherapist p4 = new Physiotherapist(4, "Dr. Diana Bolton", "", Arrays.asList("Sports Physiotherapy", "Specialised exercises"));
 
-        treatments.add(new Treatment("Orthopaedic Physiotherapy", 40, 45.0,"Sunday",p1));
-        treatments.add(new Treatment("Chronic Joint Pain Treatment", 50, 55.0,"Sunday", p1));
-        treatments.add(new Treatment("Neurological Physiotherapy", 45, 45.0, "Monday", p2));
-        treatments.add(new Treatment("Spinal Cord Injuries Treatment", 60, 70.0, "Monday", p2));
-        treatments.add(new Treatment("Cardiorespiratory Physiotherapy", 30, 50.0, "Tuesday", p3));
-        treatments.add(new Treatment("Asthma Exercises", 35, 40.0, "Tuesday", p3));
-        treatments.add(new Treatment("Sports Physiotherapy", 40, 45.0, "Wednesday", p4));
-        treatments.add(new Treatment("Specialized Exercise Session", 60, 30.0,"Wednesday", p4));
+        treatments.add(new Treatment("Orthopaedic Physiotherapy", new Date() , p1));
+        treatments.add(new Treatment("Chronic Joint Pain Treatment",new Date(), p1));
+        treatments.add(new Treatment("Neurological Physiotherapy", new Date(), p2));
+        treatments.add(new Treatment("Spinal Cord Injuries Treatment",new Date(), p2));
+        treatments.add(new Treatment("Cardiorespiratory Physiotherapy",new Date(), p3));
+        treatments.add(new Treatment("Asthma Exercises", new Date(), p3));
+        treatments.add(new Treatment("Sports Physiotherapy", new Date(), p4));
+        treatments.add(new Treatment("Specialized Exercise Session", new Date(), p4));
 
 
+    }
+    static void selectUser() {
+        System.out.println(" Select a user: ");
+        Scanner scanner = new Scanner(System.in);
     }
 
     static void showMenu() {
@@ -104,9 +109,9 @@ public class Main {
 
     static void listAvailableAppointments() {
         System.out.println("\nAvailable Appointments:");
-        for (Treatment t : appointments) {
-            if ("Available".equalsIgnoreCase(t.status.trim())) {
-                System.out.println(t.time + " - " + t.getTreatmentName() + " by " + t.getPhysiotherapist()+" -Status"+t.status);
+        for ( Appointment a: appointments) {
+            if ("Available".equalsIgnoreCase(a.getStatus().trim())) {
+                System.out.println(a.getTreatment() + " - " + a.getPatient() + " by " + a.getPhysiotherapist()+" -Status"+a.getStatus());
             }
         }
     }
@@ -126,8 +131,8 @@ public class Main {
             return;
         }
 
-        for (Treatment t : appointments) {
-            if (t.getTime().equals(time) && t.status.equals("Available")) {
+        for (Treatment t : treatments) {
+            if (t.equals(time) && t.status.equals("Available")) {
                 t.patient = patient;
                 t.status = "Booked";
                 System.out.println("Appointment booked successfully!");
@@ -142,7 +147,7 @@ public class Main {
         int patientId = scanner.nextInt();
         scanner.nextLine();
 
-        for (Treatment t : appointments) {
+        for (Treatment t : treatments) {
             if (t.patient != null && t.patient.getId() == patientId && t.status.equals("Booked")) {
                 t.patient = null;
                 t.status = "Available";
@@ -155,7 +160,7 @@ public class Main {
 
     static void generateReport() {
         System.out.println("\nAppointment Report:");
-        for (Treatment t : appointments) {
+        for (Treatment t : treatments) {
             String patientName = (t.patient != null) ? t.patient.getPatientName() : "None";
             System.out.println(t.getPhysiotherapist() + " - " + t.getTreatmentName() + " - " + patientName + " - " + t.getTime() + " - " + t.status);
         }

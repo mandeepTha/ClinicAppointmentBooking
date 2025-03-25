@@ -1,14 +1,12 @@
 package org.boostphysio.Model;
 
-public class Appointment extends Treatment {
+public class Appointment {
     private Physiotherapist physiotherapist;
     private Patient patient;
     private Treatment treatment;
     private String status;
 
     public Appointment(Patient patient, Physiotherapist physiotherapist, Treatment treatment, String status) {
-        super();
-
         this.patient = patient;
         this.physiotherapist = physiotherapist;
         this.treatment = treatment;
@@ -30,14 +28,14 @@ public class Appointment extends Treatment {
         return treatment;
     }
 
-
-    public String toString(){
-        return "Appointment Details:\n" +
-                "Patient: " +patient.getPatientName()+ "(Phone number: "+ patient.getPatientPhoneNumber()+")\n"+
-                "Physiotherapist: "+physiotherapist.getPhysiotherapistName()+ "(Expertise: "+physiotherapist.getExpertise()+")\n"+
-                "Treatment: "+treatment.getTreatmentName()+ "\n" +
-                "Date & Time: "+ treatment.getTime() ;
-
+    @Override
+    public String toString() {
+        return "Appointment{" +
+                "physiotherapist=" + physiotherapist +
+                ", patient=" + patient +
+                ", treatment=" + treatment +
+                ", status='" + status + '\'' +
+                '}';
     }
 
 }
