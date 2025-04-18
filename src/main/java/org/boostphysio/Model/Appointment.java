@@ -17,9 +17,9 @@ public class Appointment {
     }
 
     public void bookAppointment(Patient patient) {
-        if(status.equals("Available")) {
+            this.patient = patient;
             this.status = "Booked";
-        }
+
     }
 
     public void cancelAppointment() {

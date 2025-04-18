@@ -329,7 +329,6 @@ public class Main {
         }
     }
 
-
     private static void cancelAppointment(Scanner scanner) {
         System.out.print("Enter Patient ID to cancel appointment: ");
         int patientId = Integer.parseInt(scanner.nextLine());
@@ -346,9 +345,10 @@ public class Main {
         }
 
         Appointment appointment = appointmentOpt.get();
-        appointment.cancelAppointment(); // should update status to CANCELLED
+        appointment.cancelAppointment();  // sets status = "Cancelled"
         System.out.println("✅ Appointment cancelled successfully.");
     }
+
 
     static void generateReport() {
         System.out.println("\nAppointment Report:");
