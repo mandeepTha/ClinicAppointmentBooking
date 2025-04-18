@@ -5,6 +5,8 @@ import org.boostphysio.Model.Patient;
 import org.boostphysio.Model.Physiotherapist;
 import org.boostphysio.Model.Treatment;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,7 +17,6 @@ import java.util.*;
 
 
 public class Main {
-    private static final Scanner scanner = new Scanner(System.in);
     private static final List<Patient> patients = new ArrayList<>();
     private static final List<Physiotherapist> physiotherapists = new ArrayList<>();
     private static final List<Treatment> treatments = new ArrayList<>();
@@ -25,15 +26,12 @@ public class Main {
 
     public static void main(String[] args) {
         initializeData();
-        selectUser();
         showMenu();
 
 
     }
 
     private static void initializeData() {
-
-
 
         //Adding Patients
         patients.add(new Patient(1, "Jason Becker", "40 Aviation Avenue", "07521259532"));
@@ -50,25 +48,26 @@ public class Main {
         patients.add(new Patient(12, "Guthrie Govan", "40 Aviation Avenue", "07521259551"));
 
         //Adding Physiotherapist
-        Physiotherapist p1 = new Physiotherapist(1, "Dr. Steven Gordan", "", Arrays.asList("Orthopaedic Physiotherapy", "Chronic joint pain"));
-        Physiotherapist p2 =new Physiotherapist(2, "Dr. Stephan Ramsey", "", Arrays.asList("Neurological Physiotherapy", "Spinal cord injuries"));
-        Physiotherapist p3 =new Physiotherapist(3, "Dr. Nishant James", "", Arrays.asList("Cardiorespiratory Physiotherapy", "Asthma"));
-        Physiotherapist p4 = new Physiotherapist(4, "Dr. Diana Bolton", "", Arrays.asList("Sports Physiotherapy", "Specialised exercises"));
+        Physiotherapist p1 = new Physiotherapist(1, "Dr. Steven Gordan", "1 Rose Street", "07541236585", Arrays.asList("Orthopaedic Physiotherapy", "Chronic joint pain"));
+        Physiotherapist p2 =new Physiotherapist(2, "Dr. Stephan Ramsey", "33 Cavendish Avenue","07541523658", Arrays.asList("Neurological Physiotherapy", "Spinal cord injuries"));
+        Physiotherapist p3 =new Physiotherapist(3, "Dr. Nishant James", "22 Rticroft Close", "07452315985", Arrays.asList("Cardiorespiratory Physiotherapy", "Asthma"));
+        Physiotherapist p4 = new Physiotherapist(4, "Dr. Diana Bolton", "19 Lincoln Gardens", "07523145697",Arrays.asList("Sports Physiotherapy", "Specialised exercises"));
 
-        treatments.add(new Treatment("Orthopaedic Physiotherapy", new Date() , p1));
-        treatments.add(new Treatment("Chronic Joint Pain Treatment",new Date(), p1));
-        treatments.add(new Treatment("Neurological Physiotherapy", new Date(), p2));
-        treatments.add(new Treatment("Spinal Cord Injuries Treatment",new Date(), p2));
-        treatments.add(new Treatment("Cardiorespiratory Physiotherapy",new Date(), p3));
-        treatments.add(new Treatment("Asthma Exercises", new Date(), p3));
-        treatments.add(new Treatment("Sports Physiotherapy", new Date(), p4));
-        treatments.add(new Treatment("Specialized Exercise Session", new Date(), p4));
+        physiotherapists.add(p1);
+        physiotherapists.add(p2);
+        physiotherapists.add(p3);
+        physiotherapists.add(p4);
+
+        treatments.add(new Treatment("Orthopaedic Physiotherapy", 50 , p1));
+        treatments.add(new Treatment("Chronic Joint Pain Treatment",35, p1));
+        treatments.add(new Treatment("Neurological Physiotherapy", 45, p2));
+        treatments.add(new Treatment("Spinal Cord Injuries Treatment",35, p2));
+        treatments.add(new Treatment("Cardiorespiratory Physiotherapy",60, p3));
+        treatments.add(new Treatment("Asthma Exercises", 30, p3));
+        treatments.add(new Treatment("Sports Physiotherapy", 40, p4));
+        treatments.add(new Treatment("Specialized Exercise Session", 60, p4));
 
 
-    }
-    static void selectUser() {
-        System.out.println(" Select a user: ");
-        Scanner scanner = new Scanner(System.in);
     }
 
     static void showMenu() {
@@ -79,7 +78,9 @@ public class Main {
             System.out.println("2. Book an Appointment");
             System.out.println("3. Cancel an Appointment");
             System.out.println("4. View Report");
-            System.out.println("5. Exit");
+            System.out.println("5. Add Patient");
+            System.out.println("6. Remove Patient");
+            System.out.println("7. Exit");
             System.out.print("Choose an option: ");
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -98,6 +99,12 @@ public class Main {
                     generateReport();
                     break;
                 case 5:
+                    addPatient(scanner);
+                    break;
+                case 6:
+                    removePatient(scanner);
+                    break;
+                case 7:
                     System.out.println("Exiting...");
                     return;
                 default:
@@ -110,47 +117,117 @@ public class Main {
     static void listAvailableAppointments() {
         System.out.println("\nAvailable Appointments:");
         for ( Appointment a: appointments) {
-            if ("Available".equalsIgnoreCase(a.getStatus().trim())) {
-                System.out.println(a.getTreatment() + " - " + a.getPatient() + " by " + a.getPhysiotherapist()+" -Status"+a.getStatus());
+            if (a.getStatus().equals("Available")) {
+                System.out.println(a);
             }
         }
     }
 
-    static void bookAppointment(Scanner scanner) {
-        listAvailableAppointments();
+
+    private static void searchByExpertise(Scanner scanner) {
+        System.out.print("Enter area of expertise: ");
+        String expertise = scanner.nextLine();
+
+        List<Appointment> matches = new ArrayList<>();
+        for (Appointment a : appointments) {
+            if (a.getStatus().equals("Available") &&
+                    a.getPhysiotherapist().getExpertise().stream().anyMatch(e -> e.equalsIgnoreCase(expertise))) {
+                matches.add(a);
+            }
+        }
+
+        if (matches.isEmpty()) {
+            System.out.println("No available treatments found for that expertise.");
+            return;
+        }
+
+        matches.forEach(System.out::println);
+        bookAppointmentFromList(scanner, matches);
+    }
+
+    private static void searchByPhysiotherapist(Scanner scanner) {
+        System.out.print("Enter physiotherapist name: ");
+        String name = scanner.nextLine();
+
+        List<Appointment> matches = new ArrayList<>();
+        for (Appointment a : appointments) {
+            if (a.getStatus().equals("Available") &&
+                    a.getPhysiotherapist().getName().equalsIgnoreCase(name)) {
+                matches.add(a);
+            }
+        }
+
+        if (matches.isEmpty()) {
+            System.out.println("❌ No available appointments found for that physiotherapist.");
+            return;
+        }
+
+        matches.forEach(System.out::println);
+        bookAppointmentFromList(scanner, matches);
+    }
+
+    private static void bookAppointmentFromList(Scanner scanner, List<Appointment> options) {
         System.out.print("Enter Patient ID to book: ");
         int patientId = scanner.nextInt();
         scanner.nextLine();
 
-        System.out.print("Enter Appointment Time: ");
-        String time = scanner.nextLine();
+        System.out.print("Enter date/time (YYYY-MM-DD HH:mm): ");
+        String dateT = scanner.nextLine();
+        LocalDateTime dateTime = LocalDateTime.parse(dateT.replace(" ", "T"));
 
         Patient patient = patients.stream().filter(p -> p.getId() == patientId).findFirst().orElse(null);
         if (patient == null) {
-            System.out.println("Invalid patient ID.");
+            System.out.println("❌ Invalid patient ID.");
             return;
         }
 
-        for (Treatment t : treatments) {
-            if (t.equals(time) && t.status.equals("Available")) {
-                t.patient = patient;
-                t.status = "Booked";
-                System.out.println("Appointment booked successfully!");
+        for (Appointment a : options) {
+            if (a.getDateTime().equals(dateTime)) {
+                a.bookAppointment();
+                System.out.println("✅ Appointment booked!");
                 return;
             }
         }
-        System.out.println("No available appointment at this time.");
+
+        System.out.println("Appointment not found.");
     }
+
+    static void bookAppointment(Scanner scanner) {
+
+        while (true) {
+            System.out.println("\n📘 Book an Appointment:");
+            System.out.println("1. Search & Book by Expertise");
+            System.out.println("2. Search & Book by Physiotherapist");
+            System.out.println("3. Back to Main Menu");
+            System.out.print("Choose an option: ");
+
+            int subChoice = scanner.nextInt();
+            scanner.nextLine(); // consume newline
+
+            switch (subChoice) {
+                case 1:
+                    searchByExpertise(scanner);
+                    break;
+                case 2:
+                    searchByPhysiotherapist(scanner);
+                    break;
+                case 3:
+                    return;
+                default:
+                    System.out.println("❌ Invalid option. Please try again.");
+            }
+        }
+    }
+
 
     static void cancelAppointment(Scanner scanner) {
         System.out.print("Enter Patient ID to cancel: ");
         int patientId = scanner.nextInt();
         scanner.nextLine();
 
-        for (Treatment t : treatments) {
-            if (t.patient != null && t.patient.getId() == patientId && t.status.equals("Booked")) {
-                t.patient = null;
-                t.status = "Available";
+        for (Appointment a : appointments) {
+            if (a.getPatient() != null && a.getPatient().getId() == patientId && a.getStatus().equals("Booked")) {
+                a.cancelAppointment();
                 System.out.println("Appointment cancelled successfully.");
                 return;
             }
@@ -160,9 +237,36 @@ public class Main {
 
     static void generateReport() {
         System.out.println("\nAppointment Report:");
-        for (Treatment t : treatments) {
-            String patientName = (t.patient != null) ? t.patient.getPatientName() : "None";
-            System.out.println(t.getPhysiotherapist() + " - " + t.getTreatmentName() + " - " + patientName + " - " + t.getTime() + " - " + t.status);
+        for (Appointment a : appointments) {
+            System.out.println(a);
+        }
+    }
+
+    private static void addPatient(Scanner scanner) {
+        System.out.print("Enter Patient Name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter Address: ");
+        String address = scanner.nextLine();
+        System.out.print("Enter Phone: ");
+        String phone = scanner.nextLine();
+
+        int newId = patients.size() + 1;
+        Patient newPatient = new Patient(newId, name, address, phone);
+        patients.add(newPatient);
+
+        System.out.println("Patient added successfully: " + newPatient.getName());
+    }
+
+    private static void removePatient(Scanner scanner) {
+        System.out.print("Enter Patient ID to remove: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+
+        boolean removed = patients.removeIf(p -> p.getId() == id);
+        if (removed) {
+            System.out.println("✅ Patient removed.");
+        } else {
+            System.out.println("No patient found with that ID.");
         }
     }
 }

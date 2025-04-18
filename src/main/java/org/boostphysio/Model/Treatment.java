@@ -2,22 +2,18 @@ package org.boostphysio.Model;
 import java.util.Date;
 
 public class Treatment {
-    public String status = "Available";
+//    public String status = "Available";
     private String treatmentName;
-    public Date time;
+    public int duration;
     private Physiotherapist physiotherapist;
-    public Patient patient;
 
 
-    public Treatment(String treatmentName, Date time, Physiotherapist physiotherapist) {
+    public Treatment(String treatmentName, int duration, Physiotherapist physiotherapist) {
         this.treatmentName = treatmentName;
-        this.time = time;
+        this.duration = duration;
         this.physiotherapist = physiotherapist;
     }
 
-    public Treatment() {
-
-    }
 
 
     public String getTreatmentName() {
@@ -28,13 +24,15 @@ public class Treatment {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE d'th' MMMM yyyy, HH:mm");
         return dateTime.format(formatter);
     }*/
-    public Physiotherapist getPhysiotherapist() {
+    public Physiotherapist getPhysiotherapist()
+    {
         return physiotherapist;
     }
 
-    public Date getTime() {
-            return time;
+    public int getDuration() {
+        return duration;
     }
+
     /*
     public LocalDate getDateTime() {
         return dateTime;
@@ -43,8 +41,8 @@ public class Treatment {
     @Override
     public String toString() {
         return "Treatment: " + treatmentName + "\n" +
-                "Date & Time: " + getTime()+ "\n" +
-                "Physiotherapist: " + physiotherapist.getPhysiotherapistName();
+                "Duration " + duration+ "\n" +
+                "Physiotherapist: " + physiotherapist.getName();
     }
 
 }

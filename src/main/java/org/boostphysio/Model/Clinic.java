@@ -13,13 +13,13 @@ public class Clinic {
         // Adds New Patient
     public void addPatient(Patient patient) {
         patients.add(patient);
-        System.out.println("Added Patient: "+patient.getPatientName());
+        System.out.println("Added Patient: "+patient.getName());
     }
 
         //Adds New Physiotherapist
     public void addPhysiotherapist(Physiotherapist physiotherapist) {
         physiotherapists.add(physiotherapist);
-        System.out.println("Added Physiotherapist: "+physiotherapist.getPhysiotherapistName());
+        System.out.println("Added Physiotherapist: "+physiotherapist.getName());
 
     }
 

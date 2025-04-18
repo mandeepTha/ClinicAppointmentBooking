@@ -6,40 +6,47 @@ import java.util.List;
 
 public class Physiotherapist {
     private int id;
-    private String physiotherapistName;
-    private String physiotherapistAddress;
-    private String physiotherapistPhone;
+    private String name;
+    private String address;
+    private String phoneNumber;
     private List<String> expertise;
-    List <Date> timetable = new ArrayList<>();
+    private List<Treatment> timetable;
 
 
-    public Physiotherapist(int id, String PhysiotherapistName, String PhysiotherapistAddress, List<String> expertise) {
+    public Physiotherapist(int id, String name, String address, String phoneNumber, List<String> expertise) {
         this.id = id;
-        this.physiotherapistName = PhysiotherapistName;
-        this.physiotherapistAddress = PhysiotherapistAddress;
+        this.name = name;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
         this.expertise = expertise;
+        this.timetable = new ArrayList<>();
     }
-
-    public List<Date> getTimetable() {
-        return timetable;
-    }
+public void addTimetable(Treatment timetable) {
+        this.timetable.add(timetable);
+}
 
     public int getId() {
         return id;
     }
-    public String getPhysiotherapistName() {
-        return physiotherapistName;
+
+    public String getName() {
+        return name;
     }
-    public String getphysiotherapistAddress() {
-        return physiotherapistAddress;
-    }
+
     public List<String> getExpertise() {
         return expertise;
     }
+
+    public List<Treatment> getTimetable() {
+        return timetable;
+    }
+
     @Override
     public String toString() {
-        return "Physiotherapist: " + getPhysiotherapistName() + " (ID: " + id + ")\n" +
-                "Address: " + physiotherapistAddress + "\nPhone: " + physiotherapistPhone + "\n" +
-                "Expertise: " + expertise + "\nWorking Hours: " + timetable;
+        return "Physiotherapist{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", expertise=" + expertise +
+                '}';
     }
 }
