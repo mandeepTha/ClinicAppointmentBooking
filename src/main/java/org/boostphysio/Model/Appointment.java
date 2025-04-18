@@ -7,25 +7,23 @@ public class Appointment {
     private Patient patient;
     private Treatment treatment;
     private LocalDateTime dateTime;
-    private String status;
+    private String status = "Available";
 
-    public Appointment(Physiotherapist physiotherapist, Treatment treatment, LocalDateTime dateTime, String status) {
+    public Appointment(Physiotherapist physiotherapist, Treatment treatment, LocalDateTime dateTime) {
         this.physiotherapist = physiotherapist;
         this.treatment = treatment;
         this.dateTime = dateTime;
         this.status = "Available";
     }
 
-    public void bookAppointment() {
+    public void bookAppointment(Patient patient) {
         if(status.equals("Available")) {
-            this.patient = patient;
             this.status = "Booked";
         }
     }
 
     public void cancelAppointment() {
         if(status.equals("Booked")) {
-            this.patient = patient;
             this.status = "Cancelled";
         }
     }
@@ -41,7 +39,7 @@ public class Appointment {
     }
     public LocalDateTime getDateTime() {return dateTime;}
     public Patient getPatient() {
-        return patient;
+        return this.patient;
     }
     public Physiotherapist getPhysiotherapist() {
         return physiotherapist;
@@ -53,9 +51,9 @@ public class Appointment {
     @Override
     public String toString() {
         return "Appointment: " + treatment.getTreatmentName()+
-                "with" + physiotherapist.getName() +
-                " at " + dateTime +
-                ", Status='" + status;
+                " with " + physiotherapist.getName() +
+                " on " + dateTime +
+                ", Status " + status;
     }
 
 }
