@@ -29,6 +29,14 @@ public void addTimetable(Treatment timetable) {
         return id;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
     public String getName() {
         return name;
     }

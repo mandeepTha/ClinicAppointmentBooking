@@ -38,23 +38,23 @@ public class Main {
 
         //Adding Patients
         patients.add(new Patient(1, "Jason Becker", "40 Aviation Avenue", "07521259532"));
-        patients.add(new Patient(2, "Jeff Beck", "40 Aviation Avenue", "07521259514"));
-        patients.add(new Patient(3, "Joe Satriani", "40 Aviation Avenue", "07521259545"));
-        patients.add(new Patient(4, "Jimmy Page", "40 Aviation Avenue", "07521259576"));
-        patients.add(new Patient(5, "Jimi Hendrix", "40 Aviation Avenue", "07521259587"));
-        patients.add(new Patient(6, "David Gilmour", "40 Aviation Avenue", "07521259589"));
-        patients.add(new Patient(7, "James Hetfield", "40 Aviation Avenue", "07521259508"));
-        patients.add(new Patient(8, "Chuck Berry", "40 Aviation Avenue", "07521259565"));
-        patients.add(new Patient(9, "Eric Clapton", "40 Aviation Avenue", "07521259595"));
-        patients.add(new Patient(10, "Robert Johnson", "40 Aviation Avenue", "07521259503"));
-        patients.add(new Patient(11, "John Petrucci", "40 Aviation Avenue", "07521259520"));
-        patients.add(new Patient(12, "Guthrie Govan", "40 Aviation Avenue", "07521259551"));
+        patients.add(new Patient(2, "Jeff Beck", "41 Aviation Avenue", "07521259514"));
+        patients.add(new Patient(3, "Joe Satriani", "42 Aviation Avenue", "07521259545"));
+        patients.add(new Patient(4, "Jimmy Page", "43 Aviation Avenue", "07521259576"));
+        patients.add(new Patient(5, "Jimi Hendrix", "44 Aviation Avenue", "07521259587"));
+        patients.add(new Patient(6, "David Gilmour", "30 Aviation Avenue", "07521259589"));
+        patients.add(new Patient(7, "James Hetfield", "33 Aviation Avenue", "07521259508"));
+        patients.add(new Patient(8, "Chuck Berry", " 36 Aviation Avenue", "07521259565"));
+        patients.add(new Patient(9, "Eric Clapton", "37 Aviation Avenue", "07521259595"));
+        patients.add(new Patient(10, "Robert Johnson", "38 Aviation Avenue", "07521259503"));
+        patients.add(new Patient(11, "John Petrucci", "39 Aviation Avenue", "07521259520"));
+        patients.add(new Patient(12, "Guthrie Govan", "20 Aviation Avenue", "07521259551"));
 
         //Adding Physiotherapist
-        Physiotherapist p1 = new Physiotherapist(1, "Dr. Steven Gordan", "1 Rose Street", "07541236585", Arrays.asList("Orthopaedic Physiotherapy", "Chronic joint pain"));
-        Physiotherapist p2 =new Physiotherapist(2, "Dr. Stephan Ramsey", "33 Cavendish Avenue","07541523658", Arrays.asList("Neurological Physiotherapy", "Spinal cord injuries"));
-        Physiotherapist p3 =new Physiotherapist(3, "Dr. Nishant James", "22 Rticroft Close", "07452315985", Arrays.asList("Cardiorespiratory Physiotherapy", "Asthma"));
-        Physiotherapist p4 = new Physiotherapist(4, "Dr. Diana Bolton", "19 Lincoln Gardens", "07523145697",Arrays.asList("Sports Physiotherapy", "Specialised exercises"));
+        Physiotherapist p1 = new Physiotherapist(101, "Dr. Steven Gordan", "1 Rose Street", "07541236585", Arrays.asList("Orthopaedic Physiotherapy", "Chronic joint pain"));
+        Physiotherapist p2 =new Physiotherapist(201, "Dr. Stephan Ramsey", "33 Cavendish Avenue","07541523658", Arrays.asList("Neurological Physiotherapy", "Spinal cord injuries"));
+        Physiotherapist p3 =new Physiotherapist(301, "Dr. Nishant James", "22 Rticroft Close", "07452315985", Arrays.asList("Cardiorespiratory Physiotherapy", "Asthma"));
+        Physiotherapist p4 = new Physiotherapist(401, "Dr. Diana Bolton", "19 Lincoln Gardens", "07523145697",Arrays.asList("Sports Physiotherapy", "Specialised exercises"));
 
         physiotherapists.add(p1);
         physiotherapists.add(p2);
