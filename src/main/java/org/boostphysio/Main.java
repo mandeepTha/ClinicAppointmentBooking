@@ -6,6 +6,7 @@ import org.boostphysio.Model.Physiotherapist;
 import org.boostphysio.Model.Treatment;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -103,7 +104,8 @@ public class Main {
             System.out.println("4. View Report");
             System.out.println("5. Add Patient");
             System.out.println("6. Remove Patient");
-            System.out.println("7. Exit");
+            System.out.println("7. Mark Appointment as Attended");
+            System.out.println("8. Exit");
             System.out.print("Choose an option: ");
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -128,6 +130,9 @@ public class Main {
                     removePatient(scanner);
                     break;
                 case 7:
+                    markAppointmentAsAttended(scanner);
+                    break;
+                case 8:
                     System.out.println("Exiting...");
                     return;
                 default:
@@ -350,22 +355,58 @@ public class Main {
     }
 
 
-    static void generateReport() {
-        System.out.println("\nAppointment Report:");
-        appointments.stream()
-                .sorted(Comparator.comparing(Appointment::getDateTime))
-                .forEach(a -> {
-                    String patientName = (a.getPatient() != null) ? a.getPatient().getName() : "None";
-                    String formattedDate = formatAppointmentTime(a.getDateTime(), a.getTreatment().getDuration());
-                    System.out.printf("➤ %s - %s - %s - %s [%s]%n",
-                            a.getPhysiotherapist().getName(),
-                            a.getTreatment().getTreatmentName(),
-                            patientName,
-                            formattedDate,
-                            a.getStatus());
-                });
 
+    static void generateReport() {
+        System.out.println("\n📄 Appointment Report:");
+
+        // Group appointments by physiotherapist
+        Map<Physiotherapist, List<Appointment>> appointmentsByPhysio = new HashMap<>();
+        for (Appointment a : appointments) {
+            appointmentsByPhysio
+                    .computeIfAbsent(a.getPhysiotherapist(), k -> new ArrayList<>())
+                    .add(a);
+        }
+
+        for (Map.Entry<Physiotherapist, List<Appointment>> entry : appointmentsByPhysio.entrySet()) {
+            Physiotherapist physio = entry.getKey();
+            System.out.println("\n" + physio.getName());
+
+            List<Appointment> sortedAppointments = entry.getValue().stream()
+                    .sorted(Comparator.comparing(Appointment::getDateTime))
+                    .toList();
+
+            for (Appointment a : sortedAppointments) {
+                String dateTimeFormatted = formatDateTime(a.getDateTime(), a.getTreatment().getDuration());
+                String patientName = a.getPatient() != null ? a.getPatient().getName() : "N/A";
+                System.out.printf("- %s → %s → %s → %s\n",
+                        a.getTreatment().getTreatmentName(),
+                        patientName,
+                        dateTimeFormatted,
+                        a.getStatus());
+            }
+        }
+
+        // Count attended appointments for ranking
+        Map<Physiotherapist, Long> attendedCount = appointments.stream()
+                .filter(a -> a.getStatus() == "Attended")
+                .collect(Collectors.groupingBy(Appointment::getPhysiotherapist, Collectors.counting()));
+
+        System.out.println("\n🏆 Top Attending Physiotherapists:");
+        attendedCount.entrySet().stream()
+                .sorted(Map.Entry.<Physiotherapist, Long>comparingByValue().reversed())
+                .forEach(entry -> {
+                    System.out.printf("- %s – %d appointments attended\n", entry.getKey().getName(), entry.getValue());
+                });
     }
+
+    private static String formatDateTime(LocalDateTime dateTime, int duration) {
+        DateTimeFormatter startFormat = DateTimeFormatter.ofPattern("EEEE d'th' MMMM yyyy, HH:mm");
+        LocalDateTime endTime = dateTime.plusMinutes(duration);
+        DateTimeFormatter endFormat = DateTimeFormatter.ofPattern("HH:mm");
+
+        return dateTime.format(startFormat) + " - " + endTime.format(endFormat);
+    }
+
 
     private static void addPatient(Scanner scanner) {
         System.out.print("Enter Patient Name: ");
@@ -394,5 +435,47 @@ public class Main {
             System.out.println("No patient found with that ID.");
         }
     }
+
+    static void markAppointmentAsAttended(Scanner scanner) {
+        System.out.print("Enter Patient ID to check-in: ");
+        int patientId = scanner.nextInt();
+        scanner.nextLine();
+
+        List<Appointment> bookedAppointments = appointments.stream()
+                .filter(a -> a.getPatient() != null
+                        && a.getPatient().getId() == patientId
+                        && a.getStatus() == "Booked")
+                .toList();
+
+        if (bookedAppointments.isEmpty()) {
+            System.out.println("No booked appointment found for this patient.");
+            return;
+        }
+
+        System.out.println("Booked Appointments:");
+        for (int i = 0; i < bookedAppointments.size(); i++) {
+            Appointment a = bookedAppointments.get(i);
+            String formatted = formatDateTime(a.getDateTime(), a.getTreatment().getDuration());
+            System.out.printf("%d. %s with %s at %s [%s]\n",
+                    i + 1,
+                    a.getTreatment().getTreatmentName(),
+                    a.getPhysiotherapist().getName(),
+                    formatted,
+                    a.getStatus());
+        }
+
+        System.out.print("Select appointment number to mark as attended: ");
+        int selected = scanner.nextInt();
+        scanner.nextLine();
+
+        if (selected >= 1 && selected <= bookedAppointments.size()) {
+            Appointment toMark = bookedAppointments.get(selected - 1);
+            toMark.attendedAppointment(); //  sets status to ATTENDED
+            System.out.println("✅ Appointment marked as attended.");
+        } else {
+            System.out.println("Invalid selection.");
+        }
+    }
+
 }
 
