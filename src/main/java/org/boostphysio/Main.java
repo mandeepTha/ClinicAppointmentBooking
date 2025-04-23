@@ -90,7 +90,7 @@ public class Main {
 
             // Dr. Diana Bolton
             appointments.add(new Appointment(p4, Physio, weekStart.plusDays(1).withHour(9).withMinute(30))); // Friday 9:30am
-            appointments.add(new Appointment(p4, Special, weekStart.plusDays(4).withHour(13).withMinute(0))); //Monday 1pm
+            appointments.add(new Appointment(p4, Special, weekStart.plusDays(4).withHour(11).withMinute(0))); //Monday 11am
         }
     }
 
@@ -214,6 +214,11 @@ public class Main {
             return;
         }
 
+        if (hasConflict(patient, selectedAppointment.getDateTime(), selectedAppointment.getTreatment().getDuration())) {
+            System.out.println("⚠️ Patient already has an appointment at this time. Cannot double book.");
+            return;
+        }
+
         selectedAppointment.bookAppointment(patient);
         System.out.println("✅ Appointment booked successfully.");
     }
@@ -278,7 +283,12 @@ public class Main {
             return;
         }
 
-        selectedAppointment.bookAppointment(patient);
+        if (hasConflict(patient, selectedAppointment.getDateTime(), selectedAppointment.getTreatment().getDuration())) {
+            System.out.println("⚠️ Patient already has an appointment at this time. Cannot double book.");
+            return;
+        }
+
+           selectedAppointment.bookAppointment(patient);
         System.out.println("✅ Appointment booked successfully.");
     }
 
@@ -305,6 +315,22 @@ public class Main {
         };
     }
 
+    private static boolean hasConflict(Patient patient, LocalDateTime newDateTime, int newDuration) {
+        for (Appointment a : appointments) {
+            if (a.getPatient() != null && a.getPatient().getId() == patient.getId()) {
+                LocalDateTime existingStart = a.getDateTime();
+                LocalDateTime existingEnd = a.getDateTime().plusMinutes(a.getTreatment().getDuration());
+                LocalDateTime newEnd = newDateTime.plusMinutes(newDuration);
+
+                boolean overlaps = !(newDateTime.isAfter(existingEnd) || newEnd.isBefore(existingStart));
+
+                if (overlaps && Objects.equals(a.getStatus(), "Booked")) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
 
     static void bookAppointment(Scanner scanner) {
