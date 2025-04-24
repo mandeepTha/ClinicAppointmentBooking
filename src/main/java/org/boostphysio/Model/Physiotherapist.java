@@ -21,9 +21,7 @@ public class Physiotherapist {
         this.expertise = expertise;
         this.timetable = new ArrayList<>();
     }
-public void addTimetable(Treatment timetable) {
-        this.timetable.add(timetable);
-}
+
 
     public int getId() {
         return id;
@@ -56,5 +54,9 @@ public void addTimetable(Treatment timetable) {
                 ", name='" + name + '\'' +
                 ", expertise=" + expertise +
                 '}';
+    }
+
+    public void addTimetable(Treatment treatment) {
+        this.timetable.add(treatment);
     }
 }

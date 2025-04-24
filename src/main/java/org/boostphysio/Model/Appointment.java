@@ -56,4 +56,11 @@ public class Appointment {
                 ", Status " + status;
     }
 
+    public void setStatus(String available) {
+        this.status = available;
+    }
+
+    public void setDateTime(LocalDateTime appointmentDate) {
+        this.dateTime = appointmentDate;
+    }
 }
