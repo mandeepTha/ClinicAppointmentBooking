@@ -51,7 +51,7 @@ public class PatientManager {
         } else {
             System.out.println("No patient found with that ID.");
         }
-
+        new ReportGenerator().displayUpdatedPatientListAfterRemoval(patients);
 
     }
 }

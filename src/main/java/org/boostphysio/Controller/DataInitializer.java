@@ -12,12 +12,6 @@ import java.util.List;
 
 public class DataInitializer {
 
-    private static final java.util.List<Patient> patients = new ArrayList<>();
-    private static final List<Physiotherapist> physiotherapists = new ArrayList<>();
-    private static final List<Treatment> treatments = new ArrayList<>();
-    private static final List<Appointment> appointments = new ArrayList<>();
-    private static java.util.List<Treatment> List;
-
 
     public static List<Patient> initializePatients() {
         List<Patient> patients = new ArrayList<>( Arrays.asList(
@@ -70,7 +64,24 @@ public class DataInitializer {
                 }
             }
         }
+        LocalDateTime overlappingTime = LocalDateTime.of(2025, 5, 15, 10, 0); // same time for both
+
+        Physiotherapist physio1 = physios.get(0); // e.g., Dr. Steven Gordan
+        Physiotherapist physio2 = physios.get(1); // e.g., Dr. Stephan Ramsey
+
+        Treatment treatment1 = new Treatment("Orthopaedic Physiotherapy", 60, physio1);
+        Treatment treatment2 = new Treatment("Neurological Physiotherapy", 60, physio2);
+
+        Appointment appt1 = new Appointment(physio1, treatment1, overlappingTime);
+        Appointment appt2 = new Appointment(physio2, treatment2, overlappingTime);
+
+        appt1.setStatus("Available");
+        appt2.setStatus("Available");
+
+        appointments.add(appt1);
+        appointments.add(appt2);
         return appointments;
+
     }
 
 }

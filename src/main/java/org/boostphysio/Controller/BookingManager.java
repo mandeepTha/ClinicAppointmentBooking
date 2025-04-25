@@ -1,4 +1,5 @@
 package org.boostphysio.Controller;
+import org.boostphysio.ExceptionHandling.InputHandling;
 import org.boostphysio.Model.*;
 
 import java.time.LocalDateTime;
@@ -88,7 +89,7 @@ public class BookingManager {
         }
 
         selectedAppointment.bookAppointment(patient);
-        System.out.println(" Appointment booked successfully.");
+        new ReportGenerator().printAppointmentConfirmation(selectedAppointment);
     }
 
     private static void searchAndBookByPhysiotherapist(Scanner scanner, Patient patient) {
@@ -153,7 +154,7 @@ public class BookingManager {
         }
 
         selectedAppointment.bookAppointment(patient);
-        System.out.println(" Appointment booked successfully.");
+        new ReportGenerator().printAppointmentConfirmation(selectedAppointment);
     }
 
     //Date time formatter for Correct date and time including the day
@@ -198,7 +199,7 @@ public class BookingManager {
 
 
     public static void bookAppointment() {
-        System.out.println("Select a patient by ID for booking an appointment.:");
+        System.out.println("Select a patient by ID for booking an appointment.");
         new ReportGenerator().listPatients(patients);
         System.out.print("Enter patient ID: ");
         int patientId = scanner.nextInt();
@@ -217,16 +218,26 @@ public class BookingManager {
             return;
         }
 
-
         while (true) {
             System.out.println("\n📘 Book an Appointment:");
             System.out.println("1. Search & Book by Expertise");
             System.out.println("2. Search & Book by Physiotherapist");
             System.out.println("3. Back to Main Menu");
             System.out.print("Choose an option: ");
+            String input = scanner.nextLine().trim();
 
-            int subChoice = scanner.nextInt();
-            scanner.nextLine(); // consume newline
+            int subChoice;
+            try {
+                subChoice = Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println("❌ Invalid input. Please enter a number from the menu.");
+                continue;
+            }
+
+            if (input.isEmpty()) {
+                System.out.println("No input provided. Cancelling operation.");
+                return;
+            }
 
             switch (subChoice) {
                 case 1:
@@ -274,7 +285,7 @@ public class BookingManager {
 
         Appointment appointment = appointmentOpt.get();
         appointment.cancelAppointment();  // sets status = "Cancelled"
-        System.out.println(" Appointment cancelled successfully.");
+        new ReportGenerator().printAppointmentCancellation(appointment);
     }
 
     public static void attendAppointment() {

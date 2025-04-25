@@ -1,6 +1,7 @@
-package org.boostphysio.view;
+package org.boostphysio.Main;
 
 import org.boostphysio.Controller.*;
+import org.boostphysio.ExceptionHandling.InputHandling;
 import org.boostphysio.Model.*;
 import org.boostphysio.View.BookingAppointmentView;
 
@@ -9,6 +10,8 @@ import java.util.*;
 public class Main {
 
     public void run() {
+
+
         Scanner scanner = new Scanner(System.in);
 
         List<Patient> patients = DataInitializer.initializePatients();
@@ -19,10 +22,9 @@ public class Main {
         PatientManager patientManager = new PatientManager(patients, scanner);
         ReportGenerator reportGenerator = new ReportGenerator();
 
-        int choice;
+        int choice ;
         do {
             choice = BookingAppointmentView.showMenu(scanner);
-
             switch (choice) {
                 case 1 -> bookingManager.bookAppointment();
                 case 2 -> bookingManager.cancelAppointment();
@@ -37,6 +39,7 @@ public class Main {
 
         } while (choice != 0);
     }
+
 
     public static void main(String[] args) {
         new Main().run();
