@@ -7,7 +7,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.boostphysio.Controller.BookingManager.*;
 
 public class ReportGenerator {
 
@@ -20,7 +19,8 @@ public class ReportGenerator {
             for (Appointment appt : appointments) {
                 if (appt.getPhysiotherapist().getId() == physio.getId()) {
                     System.out.println("- " + appt.getTreatment().getTreatmentName() + " | "
-                            + appt.getPatient().getName() + " | "
+                            + (appt.getPatient() != null ? appt.getPatient().getName() : "Unassigned Patient")
+                            + " | "
                             + appt.getDateTime().format(formatter) + " | "
                             + appt.getStatus());
                 }
@@ -75,67 +75,23 @@ public class ReportGenerator {
             System.out.println(p.getId() + ". " + p.getName());
         }
     }
-//    static void listAvailableAppointments() {
-//        System.out.println("\nAvailable Appointments:");
-//        appointments.stream()
-//                .filter(a -> a.getStatus().equals("Available"))
-//                .sorted(Comparator.comparing(Appointment::getDateTime))
-//                .forEach(a -> {
-//                    String formatted = formatAppointmentTime(a.getDateTime(), a.getTreatment().getDuration());
-//                    System.out.printf("➤ %s with %s on %s [%s]%n",
-//                            a.getTreatment().getTreatmentName(),
-//                            a.getPhysiotherapist().getName(),
-//                            formatted,
-//                            a.getStatus());
-//                });
-//    }
-//
-//
-//
-//
-//    static void generateReport() {
-//        System.out.println("\n Appointment Report:");
-//
-//        // Group appointments by physiotherapist
-//        Map<Physiotherapist, List<Appointment>> appointmentsByPhysio = new HashMap<>();
-//        for (Appointment a : appointments) {
-//            appointmentsByPhysio
-//                    .computeIfAbsent(a.getPhysiotherapist(), k -> new ArrayList<>())
-//                    .add(a);
-//        }
-//
-//        for (Map.Entry<Physiotherapist, List<Appointment>> entry : appointmentsByPhysio.entrySet()) {
-//            Physiotherapist physio = entry.getKey();
-//            System.out.println("\n" + physio.getName());
-//
-//            List<Appointment> sortedAppointments = entry.getValue().stream()
-//                    .sorted(Comparator.comparing(Appointment::getDateTime))
-//                    .toList();
-//
-//            for (Appointment a : sortedAppointments) {
-//                String dateTimeFormatted = formatDateTime(a.getDateTime(), a.getTreatment().getDuration());
-//                String patientName = a.getPatient() != null ? a.getPatient().getName() : "N/A";
-//                System.out.printf("- %s → %s → %s → %s\n",
-//                        a.getTreatment().getTreatmentName(),
-//                        patientName,
-//                        dateTimeFormatted,
-//                        a.getStatus());
-//            }
-//        }
-//
-//        // Count attended appointments for ranking
-//        Map<Physiotherapist, Long> attendedCount = appointments.stream()
-//                .filter(a -> Objects.equals(a.getStatus(), "Attended"))
-//                .collect(Collectors.groupingBy(Appointment::getPhysiotherapist, Collectors.counting()));
-//
-//        System.out.println("\n Top Attending Physiotherapists:");
-//        attendedCount.entrySet().stream()
-//                .sorted(Map.Entry.<Physiotherapist, Long>comparingByValue().reversed())
-//                .forEach(entry -> {
-//                    System.out.printf("- %s – %d appointments attended\n", entry.getKey().getName(), entry.getValue());
-//                });
-//    }
-//
 
+    public void listPatients(List<Patient> patients) {
+        System.out.println("\nRegistered Patients:");
+        for (Patient p : patients) {
+            System.out.println(p.getId() + ". " + p.getName());
+        }
+    }
+
+    public void listPatientsSorted(List<Patient> patients) {
+        patients.sort(Comparator.comparingInt(Patient::getId));
+        listPatients(patients);
+    }
+    public void displayNewPatient(Patient patient, List<Patient> patients) {
+        System.out.println("\nPatient added successfully:");
+        System.out.println(patient.getId() + ". " + patient.getName());
+        System.out.println("\nUpdated Patient List:");
+        listPatientsSorted(patients);
+    }
 
 }

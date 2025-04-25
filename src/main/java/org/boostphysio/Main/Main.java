@@ -24,15 +24,14 @@ public class Main {
             choice = BookingAppointmentView.showMenu(scanner);
 
             switch (choice) {
-                case 1 -> patientManager.addPatient();
-                case 2 -> bookingManager.bookAppointment();
-                case 3 -> bookingManager.cancelAppointment();
-                case 4 -> bookingManager.markAppointmentAsAttended();
-                case 5 -> patientManager.addPatient();
-                case 6 -> patientManager.removePatient();
-                case 7 -> reportGenerator.viewAvailableAppointments(appointments);
-                case 8 -> reportGenerator.generateReport(appointments, physiotherapists);
-                case 0 -> System.out.println("Exiting system...");
+                case 1 -> bookingManager.bookAppointment();
+                case 2 -> bookingManager.cancelAppointment();
+                case 3 -> bookingManager.attendAppointment();
+                case 4 -> patientManager.addPatient();
+                case 5 -> patientManager.removePatient();
+                case 6 -> reportGenerator.viewAvailableAppointments(appointments);
+                case 7 -> reportGenerator.generateReport(appointments, physiotherapists);
+                case 8 -> System.out.println("Exiting system...");
                 default -> System.out.println("Invalid choice. Please try again.");
             }
 

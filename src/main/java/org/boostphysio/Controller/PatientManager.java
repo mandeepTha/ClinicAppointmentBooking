@@ -35,11 +35,12 @@ public class PatientManager {
 
         Patient patient = new Patient(id, name, address, phone);
         patients.add(patient);
-        System.out.println("Patient added successfully.");
+        new ReportGenerator().displayNewPatient(patient, patients);
     }
 
 
     public static void removePatient() {
+        new ReportGenerator().listPatients(patients);
         System.out.print("Enter Patient ID to remove: ");
         int id = scanner.nextInt();
         scanner.nextLine();
@@ -50,5 +51,7 @@ public class PatientManager {
         } else {
             System.out.println("No patient found with that ID.");
         }
+
+
     }
 }

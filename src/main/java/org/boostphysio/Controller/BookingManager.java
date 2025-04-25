@@ -20,11 +20,12 @@ public class BookingManager {
         this.patients = patients;
         this.scanner = scanner;
     }
+
     public static List<Physiotherapist> getPhysiotherapists() {
         return new ArrayList<>(new HashSet<>(appointments.stream().map(Appointment::getPhysiotherapist).toList()));
     }
 
-    private static void searchAndBookByExpertise(Scanner scanner) {
+    private static void searchAndBookByExpertise(Scanner scanner, Patient patient) {
         ReportGenerator reportGen = new ReportGenerator();
         reportGen.listExpertise(getPhysiotherapists());
 
@@ -75,9 +76,6 @@ public class BookingManager {
 
         Appointment selectedAppointment = appointmentOpt.get();
 
-        System.out.print("Enter Patient ID to book an appointment: ");
-        int patientId = Integer.parseInt(scanner.nextLine());
-        Patient patient = patients.stream().filter(p -> p.getId() == patientId).findFirst().orElse(null);
 
         if (patient == null) {
             System.out.println(" Patient not found.");
@@ -92,73 +90,8 @@ public class BookingManager {
         selectedAppointment.bookAppointment(patient);
         System.out.println(" Appointment booked successfully.");
     }
-//    private static void searchAndBookByExpertise(Scanner scanner) {
-//        System.out.print("Enter area of expertise: ");
-//        String expertise = scanner.nextLine().trim().toLowerCase();
-//
-//        List<Appointment> matchingAppointments = appointments.stream()
-//                .filter(a -> a.getStatus().equals("Available"))
-//                .filter(a -> a.getTreatment().getTreatmentName().toLowerCase().contains(expertise))
-//                .collect(Collectors.toList());
-//
-//        matchingAppointments.sort(Comparator.comparing(Appointment::getDateTime));
-//
-//        if (matchingAppointments.isEmpty()) {
-//            System.out.println(" No available appointments for this expertise.");
-//            return;
-//        }
-//
-//        System.out.println("Available Appointments:");
-//        for (Appointment a : matchingAppointments) {
-//            String timeFormatted = formatAppointmentTime(a.getDateTime(), a.getTreatment().getDuration());
-//            System.out.printf("➤ %s with %s on %s [%s]%n",
-//                    a.getTreatment().getTreatmentName(),
-//                    a.getPhysiotherapist().getName(),
-//                    timeFormatted,
-//                    a.getStatus());
-//        }
-//
-//        System.out.print("Enter appointment date and time (e.g., 2025-05-01T10:00): ");
-//        String inputDateTime = scanner.nextLine();
-//
-//        LocalDateTime selectedDateTime;
-//        try {
-//            selectedDateTime = LocalDateTime.parse(inputDateTime);
-//        } catch (DateTimeParseException e) {
-//            System.out.println(" Invalid date format. Use: yyyy-MM-ddTHH:mm");
-//            return;
-//        }
-//
-//        Optional<Appointment> appointmentOpt = matchingAppointments.stream()
-//                .filter(a -> a.getDateTime().equals(selectedDateTime))
-//                .findFirst();
-//
-//        if (appointmentOpt.isEmpty()) {
-//            System.out.println(" No appointment found at that date and time.");
-//            return;
-//        }
-//
-//        Appointment selectedAppointment = appointmentOpt.get();
-//
-//        System.out.print("Enter Patient ID to book an appointment: ");
-//        int patientId = Integer.parseInt(scanner.nextLine());
-//        Patient patient = patients.stream().filter(p -> p.getId() == patientId).findFirst().orElse(null);
-//
-//        if (patient == null) {
-//            System.out.println(" Patient not found.");
-//            return;
-//        }
-//
-//        if (hasConflict(patient, selectedAppointment.getDateTime(), selectedAppointment.getTreatment().getDuration())) {
-//            System.out.println(" Patient already has an appointment at this time. Cannot double book.");
-//            return;
-//        }
-//
-//        selectedAppointment.bookAppointment(patient);
-//        System.out.println(" Appointment booked successfully.");
-//    }
 
-    private static void searchAndBookByPhysiotherapist(Scanner scanner) {
+    private static void searchAndBookByPhysiotherapist(Scanner scanner, Patient patient) {
         ReportGenerator reportGen = new ReportGenerator();
         reportGen.listPhysiotherapists(getPhysiotherapists());
 
@@ -208,13 +141,6 @@ public class BookingManager {
         }
 
         Appointment selectedAppointment = appointmentOpt.get();
-
-        System.out.print("Enter Patient ID to book an appointment: ");
-        int patientId = Integer.parseInt(scanner.nextLine());
-        Patient patient = patients.stream()
-                .filter(p -> p.getId() == patientId)
-                .findFirst()
-                .orElse(null);
 
         if (patient == null) {
             System.out.println(" Patient not found.");
@@ -273,10 +199,7 @@ public class BookingManager {
 
     public static void bookAppointment() {
         System.out.println("Select a patient by ID for booking an appointment.:");
-        for (Patient p : patients) {
-            System.out.println(p.getId() + ". " + p.getName());
-        }
-
+        new ReportGenerator().listPatients(patients);
         System.out.print("Enter patient ID: ");
         int patientId = scanner.nextInt();
         scanner.nextLine();
@@ -295,7 +218,6 @@ public class BookingManager {
         }
 
 
-
         while (true) {
             System.out.println("\n📘 Book an Appointment:");
             System.out.println("1. Search & Book by Expertise");
@@ -308,10 +230,10 @@ public class BookingManager {
 
             switch (subChoice) {
                 case 1:
-                    searchAndBookByExpertise(scanner);
+                    searchAndBookByExpertise(scanner, selectedPatient);
                     break;
                 case 2:
-                    searchAndBookByPhysiotherapist(scanner);
+                    searchAndBookByPhysiotherapist(scanner, selectedPatient);
                     break;
                 case 3:
                     return;
@@ -322,8 +244,22 @@ public class BookingManager {
     }
 
     public static void cancelAppointment() {
+        new ReportGenerator().listPatients(patients);
         System.out.print("Enter Patient ID to cancel appointment: ");
-        int patientId = Integer.parseInt(scanner.nextLine());
+        if (scanner.hasNextLine()) scanner.nextLine();  // flush leftover newline
+        String input = scanner.nextLine().trim();
+        if (input.isEmpty()) {
+            System.out.println("No input provided. Cancelling operation.");
+            return;
+        }
+        int patientId;
+        try {
+            patientId = Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid number format. Please enter a valid patient ID.");
+            return;
+        }
+
 
         Optional<Appointment> appointmentOpt = appointments.stream()
                 .filter(a -> a.getPatient() != null)
@@ -341,7 +277,8 @@ public class BookingManager {
         System.out.println(" Appointment cancelled successfully.");
     }
 
-    public static void markAppointmentAsAttended() {
+    public static void attendAppointment() {
+        new ReportGenerator().listPatients(patients);
         System.out.print("Enter Patient ID to check-in: ");
         int patientId = scanner.nextInt();
         scanner.nextLine();
