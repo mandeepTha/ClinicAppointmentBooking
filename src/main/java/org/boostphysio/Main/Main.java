@@ -6,6 +6,8 @@ import org.boostphysio.View.BookingAppointmentView;
 
 import java.util.*;
 
+import static java.lang.System.exit;
+
 public class Main {
 
     public void run() {
@@ -32,7 +34,10 @@ public class Main {
                 case 5 -> patientManager.removePatient();
                 case 6 -> reportGenerator.viewAvailableAppointments(appointments);
                 case 7 -> reportGenerator.generateReport(appointments, physiotherapists);
-                case 8 -> System.out.println("Exiting system...");
+                case 8 -> {
+                    System.out.println("Exiting system...");
+                    System.exit(0);
+                }
                 default -> System.out.println("Invalid choice. Please try again.");
             }
 
