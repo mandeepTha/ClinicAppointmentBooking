@@ -16,13 +16,24 @@ public class ReportGenerator {
     public void generateReport(List<Appointment> appointments, List<Physiotherapist> physiotherapists) {
         System.out.println("\n=== Appointment Report by Physiotherapist ===");
 
+        boolean hasValidAppointments = appointments.stream()
+                .anyMatch(a -> !a.getStatus().equals("Available"));
+
+        if (!hasValidAppointments) {
+            System.out.println("No booked, cancelled, or attended appointments to report.");
+            return; // Stop generating further
+        }
         List<Appointment> sortedAppointments = appointments.stream()
                 .sorted(Comparator.comparing(Appointment::getDateTime))
                 .collect(Collectors.toList());
 
         for (Physiotherapist physio : physiotherapists) {
+
             System.out.println("\nPhysiotherapist: " + physio.getName());
             for (Appointment appt : sortedAppointments) {
+                if (appt.getStatus().equals("Available")) {
+                    continue; // Skip unbooked appointments
+                }
                 if (appt.getPhysiotherapist().getId() == physio.getId()) {
                     String patientName = appt.getPatient() != null ? appt.getPatient().getName() : "Unassigned";
                     System.out.println("- " + appt.getTreatment().getTreatmentName() + " | "

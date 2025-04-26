@@ -262,6 +262,7 @@ public class BookingManager {
             System.out.println("No input provided. Cancelling operation.");
             return;
         }
+
         int patientId;
         try {
             patientId = Integer.parseInt(input);
@@ -270,21 +271,54 @@ public class BookingManager {
             return;
         }
 
-
-        Optional<Appointment> appointmentOpt = appointments.stream()
+        List<Appointment> bookedAppointments = appointments.stream()
                 .filter(a -> a.getPatient() != null)
                 .filter(a -> a.getPatient().getId() == patientId)
                 .filter(a -> a.getStatus().equals("Booked"))
-                .findFirst();
+                .sorted(Comparator.comparing(Appointment::getDateTime))
+                .toList();
 
-        if (appointmentOpt.isEmpty()) {
-            System.out.println(" No booked appointment found for this patient.");
+        if (bookedAppointments.isEmpty()) {
+            System.out.println("No booked appointments found for this patient.");
             return;
         }
 
-        Appointment appointment = appointmentOpt.get();
-        appointment.cancelAppointment();  // sets status = "Cancelled"
-        new ReportGenerator().printAppointmentCancellation(appointment);
+        System.out.println("\n Booked Appointments:");
+        bookedAppointmentList(bookedAppointments);
+
+        System.out.print("Select appointment number to cancel: ");
+        String cancelInput = scanner.nextLine().trim();
+
+        int selected;
+        try {
+            selected = Integer.parseInt(cancelInput);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid selection.");
+            return;
+        }
+
+        if (selected < 1 || selected > bookedAppointments.size()) {
+            System.out.println("Invalid appointment number.");
+            return;
+        }
+
+        Appointment toCancel = bookedAppointments.get(selected - 1);
+        toCancel.cancelAppointment();
+        new ReportGenerator().printAppointmentCancellation(toCancel);
+        System.out.println("Appointment cancelled successfully.");
+    }
+
+    private static void bookedAppointmentList(List<Appointment> bookedAppointments) {
+        for (int i = 0; i < bookedAppointments.size(); i++) {
+            Appointment a = bookedAppointments.get(i);
+            String formatted = formatDateTime(a.getDateTime(), a.getTreatment().getDuration());
+            System.out.printf("%d. %s with %s at %s [%s]\n",
+                    i + 1,
+                    a.getTreatment().getTreatmentName(),
+                    a.getPhysiotherapist().getName(),
+                    formatted,
+                    a.getStatus());
+        }
     }
 
     public static void attendAppointment() {
@@ -305,16 +339,7 @@ public class BookingManager {
         }
 
         System.out.println("Booked Appointments:");
-        for (int i = 0; i < bookedAppointments.size(); i++) {
-            Appointment a = bookedAppointments.get(i);
-            String formatted = formatDateTime(a.getDateTime(), a.getTreatment().getDuration());
-            System.out.printf("%d. %s with %s at %s [%s]\n",
-                    i + 1,
-                    a.getTreatment().getTreatmentName(),
-                    a.getPhysiotherapist().getName(),
-                    formatted,
-                    a.getStatus());
-        }
+        bookedAppointmentList(bookedAppointments);
 
         System.out.print("Select appointment number to mark as attended: ");
         int selected = scanner.nextInt();

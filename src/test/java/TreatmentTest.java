@@ -8,10 +8,10 @@ public class TreatmentTest {
 
     @Test
     public void testTreatmentConstructor() {
-        Physiotherapist p = new Physiotherapist(301, "Dr. Nishant James", "22 Rticroft Close", "07452315985", Arrays.asList("Cardiorespiratory Physiotherapy", "Asthma"));
-        Treatment t = new Treatment("Cardiorespiratory Physiotherapy", 60, p);
+        Physiotherapist p = new Physiotherapist(301, "Dr. Nishant James", "22 Rticroft Close", "07452315985", Arrays.asList("Cardio respiratory Physiotherapy", "Asthma Exercises"));
+        Treatment t = new Treatment("Cardio respiratory Physiotherapy", 60, p);
 
-        assertEquals("Cardiorespiratory Physiotherapy", t.getTreatmentName());
+        assertEquals("Cardio respiratory Physiotherapy", t.getTreatmentName());
         assertEquals(60, t.getDuration());
         assertEquals(p, t.getPhysiotherapist());
     }
