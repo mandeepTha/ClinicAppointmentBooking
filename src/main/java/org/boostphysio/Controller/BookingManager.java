@@ -1,5 +1,4 @@
 package org.boostphysio.Controller;
-import org.boostphysio.ExceptionHandling.InputHandling;
 import org.boostphysio.Model.*;
 
 import java.time.LocalDateTime;
@@ -180,7 +179,7 @@ public class BookingManager {
         };
     }
 
-    private static boolean hasConflict(Patient patient, LocalDateTime newDateTime, int newDuration) {
+    public static boolean hasConflict(Patient patient, LocalDateTime newDateTime, int newDuration) {
         for (Appointment a : appointments) {
             if (a.getPatient() != null && a.getPatient().getId() == patient.getId()) {
                 LocalDateTime existingStart = a.getDateTime();
@@ -336,5 +335,9 @@ public class BookingManager {
         DateTimeFormatter endFormat = DateTimeFormatter.ofPattern("HH:mm");
 
         return dateTime.format(startFormat) + " - " + endTime.format(endFormat);
+    }
+
+    public static void setAppointments(List<Appointment> appts) {
+        appointments = appts;
     }
 }

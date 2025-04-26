@@ -1,7 +1,6 @@
 package org.boostphysio.Main;
 
 import org.boostphysio.Controller.*;
-import org.boostphysio.ExceptionHandling.InputHandling;
 import org.boostphysio.Model.*;
 import org.boostphysio.View.BookingAppointmentView;
 
